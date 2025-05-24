@@ -18,9 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        <div className="flex h-full gap-8">
+        <div className="flex h-full">
           <Sidebar />
-          {children}
+          <div className="h-full w-full bg-gray-100 px-8 py-6">{children}</div>
         </div>
       </body>
     </html>
