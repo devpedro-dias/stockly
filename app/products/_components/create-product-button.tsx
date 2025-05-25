@@ -10,7 +10,10 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "lucide-react";
+import { Loader2Icon, PlusIcon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { NumericFormat } from "react-number-format";
 import { z } from "zod";
 import { Button } from "../../_components/ui/button";
 import {
@@ -23,16 +26,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../_components/ui/dialog";
-import { addProductSchema } from "../form/schemas/add-product";
-import { useForm } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
+import { createProductsSchema } from "@/app/_actions/product/create-product/schema";
+import { createProducts } from "@/app/_actions/product/create-product";
 
-type FormSchema = z.infer<typeof addProductSchema>;
+type FormSchema = z.infer<typeof createProductsSchema>;
 
 const AddProductsButton = () => {
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const form = useForm<FormSchema>({
     shouldUnregister: true,
-    resolver: zodResolver(addProductSchema),
+    resolver: zodResolver(createProductsSchema),
     defaultValues: {
       name: "",
       price: 0,
@@ -40,12 +43,17 @@ const AddProductsButton = () => {
     },
   });
 
-  const onSubmit = (data: FormSchema) => {
-    console.log(data);
+  const onSubmit = async (data: FormSchema) => {
+    try {
+      await createProducts(data);
+      setDialogIsOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
       <DialogTrigger asChild>
         <Button>
           <PlusIcon size={20} />
@@ -54,7 +62,7 @@ const AddProductsButton = () => {
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <DialogHeader>
               <DialogTitle>Criar produto</DialogTitle>
               <DialogDescription>
@@ -127,7 +135,12 @@ const AddProductsButton = () => {
                   Cancelar
                 </Button>
               </DialogClose>
-              <Button type="submit">Salvar</Button>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && (
+                  <Loader2Icon className="mr-1 animate-spin" size={16} />
+                )}
+                Salvar
+              </Button>
             </DialogFooter>
           </form>
         </Form>
