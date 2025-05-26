@@ -8,7 +8,7 @@ const ProductsPage = async () => {
   const products = await getProducts();
 
   return (
-    <div className="m-1 h-full w-full space-y-8 rounded-lg bg-white p-8">
+    <div className="m-1 h-full w-full space-y-8 overflow-hidden rounded-lg bg-white p-8">
       <div className="flex items-end justify-between">
         <div className="space-y-1">
           <span className="text-xs font-semibold text-slate-500">Produtos</span>
@@ -17,6 +17,7 @@ const ProductsPage = async () => {
 
         <CreateProductButton />
       </div>
+      
       <DataTable
         columns={columns}
         data={JSON.parse(JSON.stringify(products))}
