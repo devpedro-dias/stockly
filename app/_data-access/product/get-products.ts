@@ -12,3 +12,9 @@ export const getProducts = async (): Promise<Product[]> => {
 // export const cachedGetProducts = unstable_cache(getProducts, ["get-products"], {
 //   revalidate: 5,
 // });
+
+// Caching with revalidateTag
+// export const cachedGetProducts = unstable_cache(getProducts, ["getProducts"], {
+//   tags: ["get-products"], is used to revalidate cache when revalidateTag is called passing the tag
+//   revalidate: 5,
+// });

@@ -15,4 +15,5 @@ export const createProducts = async (data: CreateProductSchema) => {
   });
 
   revalidatePath("/products");
+  // revalidateTag("get-products");
 };
