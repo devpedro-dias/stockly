@@ -1,16 +1,10 @@
 "use client";
 
-import { Badge } from "@/app/_components/ui/badge";
-import { Product } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
 import {
-  CircleIcon,
-  ClipboardCopyIcon,
-  EditIcon,
-  MoreHorizontalIcon,
-  Trash2Icon,
-} from "lucide-react";
-
+  AlertDialog,
+  AlertDialogTrigger,
+} from "@/app/_components/ui/alert-dialog";
+import { Badge } from "@/app/_components/ui/badge";
 import { Button } from "@/app/_components/ui/button";
 import {
   DropdownMenu,
@@ -20,28 +14,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/_components/ui/dropdown-menu";
-
+import { Product } from "@prisma/client";
+import { ColumnDef } from "@tanstack/react-table";
 import {
-  AlertDialog,
-  AlertDialogTrigger,
-} from "@/app/_components/ui/alert-dialog";
-import DeleteProductDialogContent from "./delete-dialog";
+  CircleIcon,
+  ClipboardCopyIcon,
+  EditIcon,
+  MoreHorizontalIcon,
+  TrashIcon,
+} from "lucide-react";
+import DeleteProductDialogContent from "./delete-dialog-content";
+import { Dialog, DialogTrigger } from "@/app/_components/ui/dialog";
+import UpsertProductDialogContent from "./upsert-dialog-content";
+import { useState } from "react";
 
 const getStatusLabel = (status: string) => {
   if (status === "IN_STOCK") {
     return "Em estoque";
   }
-  return "Sem estoque";
+  return "Fora de estoque";
 };
 
-export const columns: ColumnDef<Product>[] = [
+export const productTableColumns: ColumnDef<Product>[] = [
   {
     accessorKey: "name",
     header: "Produto",
   },
   {
     accessorKey: "price",
-    header: "Valor Unitário",
+    header: "Valor unitário",
   },
   {
     accessorKey: "stock",
@@ -52,23 +53,15 @@ export const columns: ColumnDef<Product>[] = [
     header: "Status",
     cell: (row) => {
       const product = row.row.original;
-      // @ts-expect-error - status is a string
       const label = getStatusLabel(product.status);
-
       return (
         <Badge
-          // @ts-expect-error - status is a string
-          variant={product.status === "IN_STOCK" ? "default" : "outline"}
-          className="gap-2"
+          variant={label === "Em estoque" ? "default" : "outline"}
+          className="gap-1.5"
         >
           <CircleIcon
-            size={10}
-            className={
-              // @ts-expect-error - status is a string
-              product.status === "Em estoque"
-                ? "fill-primary-foreground"
-                : "fill-destructive-foreground"
-            }
+            size={14}
+            className={`${label === "Em estoque" ? "fill-primary-foreground" : "fill-destructive-foreground"}`}
           />
           {label}
         </Badge>
@@ -79,38 +72,52 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "actions",
     header: "Ações",
     cell: (row) => {
+      const [editDialogOpen, setEditDialogOpen] = useState(false);
       const product = row.row.original;
       return (
         <AlertDialog>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">
-                <MoreHorizontalIcon size={16} />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Ações</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="gap-1.5"
-                onClick={() => navigator.clipboard.writeText(product.id)}
-              >
-                <ClipboardCopyIcon size={16} />
-                Copiar ID
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-1.5">
-                <EditIcon size={16} />
-                Editar
-              </DropdownMenuItem>
-              <AlertDialogTrigger asChild>
-                <DropdownMenuItem className="gap-1.5">
-                  <Trash2Icon size={16} />
-                  Deletar
+          <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
+                  <MoreHorizontalIcon size={16} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="gap-1.5"
+                  onClick={() => navigator.clipboard.writeText(product.id)}
+                >
+                  <ClipboardCopyIcon size={16} />
+                  Copiar ID
                 </DropdownMenuItem>
-              </AlertDialogTrigger>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DeleteProductDialogContent productId={product.id} />
+                <DialogTrigger asChild>
+                  <DropdownMenuItem className="gap-1.5">
+                    <EditIcon size={16} />
+                    Editar
+                  </DropdownMenuItem>
+                </DialogTrigger>
+                <AlertDialogTrigger asChild>
+                  <DropdownMenuItem className="gap-1.5">
+                    <TrashIcon size={16} />
+                    Deletar
+                  </DropdownMenuItem>
+                </AlertDialogTrigger>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <UpsertProductDialogContent
+              defaultValues={{
+                id: product.id,
+                name: product.name,
+                price: Number(product.price),
+                stock: product.stock,
+              }}
+              onSuccess={() => setEditDialogOpen(false)}
+            />
+            <DeleteProductDialogContent productId={product.id} />
+          </Dialog>
         </AlertDialog>
       );
     },
