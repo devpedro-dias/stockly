@@ -1,3 +1,4 @@
+import { PlusIcon } from "lucide-react";
 import { Button } from "../_components/ui/button";
 import { ComboboxOption } from "../_components/ui/combobox";
 import { Sheet, SheetTrigger } from "../_components/ui/sheet";
@@ -11,7 +12,7 @@ const SalesPage = async () => {
     value: product.id,
   }));
   return (
-    <div className="m-8 w-full space-y-8 rounded-lg bg-white p-8">
+    <div className="h-screen w-full space-y-8 rounded-lg bg-white p-8">
       <div className="flex w-full items-center justify-between">
         <div className="space-y-1">
           <span className="text-xs font-semibold text-slate-500">
@@ -21,7 +22,10 @@ const SalesPage = async () => {
         </div>
         <Sheet>
           <SheetTrigger asChild>
-            <Button>Nova Venda</Button>
+            <Button>
+              <PlusIcon />
+              Nova Venda
+            </Button>
           </SheetTrigger>
           <UpsertSheetContent
             products={products}
