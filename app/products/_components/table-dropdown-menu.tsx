@@ -20,8 +20,8 @@ import {
   TrashIcon,
 } from "lucide-react";
 import { useState } from "react";
-import DeleteProductDialogContent from "./delete-dialog-content";
 import UpsertProductDialogContent from "./upsert-dialog-content";
+import DeleteProductDialogContent from "./delete-dialog";
 
 interface ProductTableDropdownMenuProps {
   product: Product;

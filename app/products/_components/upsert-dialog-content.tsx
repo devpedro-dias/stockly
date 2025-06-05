@@ -35,6 +35,7 @@ interface UpsertProductDialogContentProps {
 
 const UpsertProductDialogContent = ({
   onSuccess,
+  defaultValues,
 }: UpsertProductDialogContentProps) => {
   const form = useForm<UpsertProductSchema>({
     shouldUnregister: true,
