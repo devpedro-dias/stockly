@@ -1,4 +1,4 @@
-import { deleteSale } from "@/app/_actions/sale/create-sale/delete-sale";
+import { deleteSale } from "@/app/_actions/sale/upsert-sale/delete-sale";
 import {
   AlertDialogAction,
   AlertDialogCancel,
