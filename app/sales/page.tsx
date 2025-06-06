@@ -6,6 +6,7 @@ import CreateSaleButton from "./_components/create-sale-button";
 import { saleTableColumns } from "./_components/table-columns";
 
 const SalesPage = async () => {
+  // If there are many products, it is not feasible to make this request on the server, as it will overload it, so the correct thing to do would be to add pagination to the product display, this would be more or less feasible, but it is acceptable.
   const sales = await getSales();
   const products = await getProducts();
   const productOptions: ComboboxOption[] = products.map((product) => ({
