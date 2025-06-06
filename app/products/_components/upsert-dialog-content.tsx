@@ -15,12 +15,12 @@ import {
   DialogTitle,
 } from "@/app/_components/ui/dialog";
 import {
-  Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
+  Form,
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,22 +37,22 @@ interface UpsertProductDialogContentProps {
 }
 
 const UpsertProductDialogContent = ({
-  setDialogIsOpen,
   defaultValues,
+  setDialogIsOpen,
 }: UpsertProductDialogContentProps) => {
-  const { execute: executeUpsertProduct, status } = useAction(upsertProduct, {
-    onError: () => {
-      toast.error("Ocorreu um erro ao criar o produto.");
-    },
+  const { execute: executeUpsertProduct } = useAction(upsertProduct, {
     onSuccess: () => {
-      toast.success("Produto criado com sucesso.");
+      toast.success("Produto salvo com sucesso.");
       setDialogIsOpen(false);
+    },
+    onError: () => {
+      toast.error("Ocorreu um erro ao salvar o produto.");
     },
   });
   const form = useForm<UpsertProductSchema>({
     shouldUnregister: true,
     resolver: zodResolver(upsertProductSchema),
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       id: "",
       name: "",
       price: 0,
@@ -60,11 +60,11 @@ const UpsertProductDialogContent = ({
     },
   });
 
-  const isEditing = !!defaultValues;
-
-  const onSubmit = async (data: UpsertProductSchema) => {
-    await executeUpsertProduct(data);
+  const onSubmit = (data: UpsertProductSchema) => {
+    executeUpsertProduct({ ...data, id: defaultValues?.id });
   };
+
+  const isEditing = !!defaultValues;
 
   return (
     <DialogContent>
@@ -140,10 +140,10 @@ const UpsertProductDialogContent = ({
             </DialogClose>
             <Button
               type="submit"
-              disabled={status === "executing"}
+              disabled={form.formState.isSubmitting}
               className="gap-1.5"
             >
-              {status === "executing" && (
+              {form.formState.isSubmitting && (
                 <Loader2Icon className="animate-spin" size={16} />
               )}
               Salvar
