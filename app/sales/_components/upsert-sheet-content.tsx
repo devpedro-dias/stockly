@@ -38,6 +38,8 @@ import SalesTableDropDownMenu from "./table-dropdown-menu";
 import { CheckIcon, PlusIcon } from "lucide-react";
 import { createSale } from "@/app/_actions/sale/create-sale";
 import { toast } from "sonner";
+import { useAction } from "next-safe-action/hooks";
+import { flattenValidationErrors } from "next-safe-action";
 
 const formSchema = z.object({
   productId: z.string().uuid({
@@ -66,6 +68,16 @@ const UpsertSheetContent = ({
   productOptions,
   setSheetIsOpen,
 }: UpsertSheetContentProps) => {
+  const { execute: executeCreateSale } = useAction(createSale, {
+    onError: ({ error: { validationErrors, serverError } }) => {
+      const flattenedErrors = flattenValidationErrors(validationErrors);
+      toast.error(serverError ?? flattenedErrors.formErrors[0]);
+    },
+    onSuccess: () => {
+      toast.success("Venda realizada com sucesso.");
+      setSheetIsOpen(false);
+    },
+  });
   const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>(
     [],
   );
@@ -138,19 +150,12 @@ const UpsertSheetContent = ({
   };
 
   const onSubmitSale = async () => {
-    try {
-      await createSale({
-        products: selectedProducts.map((product) => ({
-          id: product.id,
-          quantity: product.quantity,
-        })),
-      });
-      toast.success("Venda realizada com sucesso.");
-      setSheetIsOpen(false);
-    } catch (error) {
-      console.error(error);
-      toast.error("Erro ao realizar a venda.");
-    }
+    executeCreateSale({
+      products: selectedProducts.map((product) => ({
+        id: product.id,
+        quantity: product.quantity,
+      })),
+    });
   };
 
   return (
