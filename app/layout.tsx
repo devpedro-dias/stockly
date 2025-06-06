@@ -21,9 +21,7 @@ export default function RootLayout({
       <body className={`${inter.className} min-h-screen antialiased`}>
         <div className="flex h-full">
           <Sidebar />
-          <div className="min-h-screen w-full bg-gray-100 px-8 py-6">
-            {children}
-          </div>
+          {children}
         </div>
         <Toaster />
       </body>

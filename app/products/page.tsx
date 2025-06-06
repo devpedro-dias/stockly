@@ -1,3 +1,9 @@
+import Header, {
+  HeaderLeft,
+  HeaderRight,
+  HeaderSubtitle,
+  HeaderTitle,
+} from "../_components/header";
 import { DataTable } from "../_components/ui/data-table";
 import { getProducts } from "../_data-access/product/get-products";
 
@@ -8,15 +14,17 @@ const ProductsPage = async () => {
   const products = await getProducts();
 
   return (
-    <div className="m-1 h-full w-full space-y-8 overflow-hidden rounded-lg bg-white p-8">
-      <div className="flex items-end justify-between">
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-slate-500">Produtos</span>
-          <h1 className="text-2xl font-bold">Gestão de produtos</h1>
-        </div>
+    <div className="m-8 w-full space-y-8 rounded-lg bg-white p-8">
+      <Header>
+        <HeaderLeft>
+          <HeaderSubtitle>Gestão de Produtos</HeaderSubtitle>
 
-        <CreateProductButton />
-      </div>
+          <HeaderTitle>Produtos</HeaderTitle>
+        </HeaderLeft>
+        <HeaderRight>
+          <CreateProductButton />
+        </HeaderRight>
+      </Header>
 
       <DataTable
         columns={productTableColumns}
