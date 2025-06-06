@@ -40,7 +40,7 @@ const UpsertProductDialogContent = ({
   setDialogIsOpen,
   defaultValues,
 }: UpsertProductDialogContentProps) => {
-  const { execute: executeUpsertProduct } = useAction(upsertProduct, {
+  const { execute: executeUpsertProduct, status } = useAction(upsertProduct, {
     onError: () => {
       toast.error("Ocorreu um erro ao criar o produto.");
     },
@@ -63,7 +63,7 @@ const UpsertProductDialogContent = ({
   const isEditing = !!defaultValues;
 
   const onSubmit = async (data: UpsertProductSchema) => {
-    executeUpsertProduct(data);
+    await executeUpsertProduct(data);
   };
 
   return (
@@ -140,10 +140,10 @@ const UpsertProductDialogContent = ({
             </DialogClose>
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={status === "executing"}
               className="gap-1.5"
             >
-              {form.formState.isSubmitting && (
+              {status === "executing" && (
                 <Loader2Icon className="animate-spin" size={16} />
               )}
               Salvar
