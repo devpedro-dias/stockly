@@ -26,10 +26,7 @@ const ProductsPage = async () => {
         </HeaderRight>
       </Header>
 
-      <DataTable
-        columns={productTableColumns}
-        data={JSON.parse(JSON.stringify(products))}
-      />
+      <DataTable columns={productTableColumns} data={products} />
     </div>
   );
 };
