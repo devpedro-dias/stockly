@@ -79,6 +79,7 @@ const SalesTableDropDownMenu = ({
         <DeleteSaleDialogContent saleId={sale.id} />
       </AlertDialog>
       <UpsertSheetContent
+        isOpen={upsertSheetIsOpen}
         saleId={sale.id}
         productOptions={productOption}
         products={products}
