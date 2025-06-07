@@ -10,6 +10,10 @@ import { getProducts } from "../_data-access/product/get-products";
 import CreateProductButton from "./_components/create-product-button";
 import { productTableColumns } from "./_components/table-columns";
 
+// Essa página será montada uma vez e reutilizada (SSG), podendo ser incrementada de forma regenerativa (ISR)
+export const dynamic = "force-static";
+export const revalidate = 10;
+
 const ProductsPage = async () => {
   const products = await getProducts();
 

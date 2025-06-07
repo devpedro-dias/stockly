@@ -17,6 +17,9 @@ import TotalRevenueCard from "./_components/total-revenue-card";
 import TotalSalesCard from "./_components/total-sales-card";
 import { SummaryCardSkeleton } from "./_components/summary-card";
 
+// Essa página será montada do zero a cada acesso (SSR)Add commentMore actions
+export const dynamic = "force-dynamic";
+
 const Home = async () => {
   return (
     <div className="m-8 flex w-full flex-col space-y-8 rounded-lg">

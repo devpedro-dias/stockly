@@ -11,6 +11,10 @@ import { getSales } from "../_data-access/sale/get-sales";
 import CreateSaleButton from "./_components/create-sale-button";
 import { saleTableColumns } from "./_components/table-columns";
 
+// Essa página será montada uma vez e reutilizada (SSG), podendo ser incrementada de forma regenerativa (ISR)
+export const dynamic = "force-static";
+export const revalidate = 10;
+
 const SalesPage = async () => {
   // If there are many products, it is not feasible to make this request on the server, as it will overload it, so the correct thing to do would be to add pagination to the product display, this would be more or less feasible, but it is acceptable.
   const sales = await getSales();
