@@ -37,7 +37,5 @@ export const deleteSale = actionClient
       }
     });
 
-    revalidatePath("/products");
-    revalidatePath("/sales");
-    revalidatePath("/");
+    revalidatePath("/", "layout");
   });
