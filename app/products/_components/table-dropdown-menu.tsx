@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/app/_components/ui/dropdown-menu";
-import { Product } from "@prisma/client";
+import { ProductDto } from "@/app/_data-access/product/get-products";
 import {
   MoreHorizontalIcon,
   ClipboardCopyIcon,
@@ -25,7 +25,7 @@ import DeleteProductDialogContent from "./delete-dialog";
 import { toast } from "sonner";
 
 interface ProductTableDropdownMenuProps {
-  product: Product;
+  product: ProductDto;
 }
 
 const ProductTableDropdownMenu = ({
@@ -74,7 +74,7 @@ const ProductTableDropdownMenu = ({
           defaultValues={{
             id: product.id,
             name: product.name,
-            price: Number(product.price),
+            price: product.price,
             stock: product.stock,
           }}
           setDialogIsOpen={setEditDialogOpen}

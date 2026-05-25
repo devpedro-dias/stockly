@@ -6,14 +6,14 @@ import { NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   const searchParams = request.nextUrl.searchParams;
 
   const query = searchParams.get("query");
   console.log(query);
 
-  const productId = params.id;
+  const { id: productId } = await params;
   const product = await db.product.findUnique({
     where: {
       id: productId,
@@ -36,9 +36,9 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
-  const productId = params.id;
+  const { id: productId } = await params;
   const product = await db.product.delete({
     where: {
       id: productId,
