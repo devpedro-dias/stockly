@@ -8,12 +8,12 @@ body {
 }
 
 body {
-  @apply bg-gray-100;
+  @apply bg-background;
 }
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 220 14% 96%;
 
     --foreground: 222.2 84% 4.9%;
 

@@ -8,8 +8,8 @@ import { Skeleton } from "@/app/_components/ui/skeleton";
 const MostSoldProducts = async () => {
   const mostSoldProducts = await getMostSoldProducts();
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-xl bg-white">
-      <p className="p-6 text-lg font-semibold text-slate-900">
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border bg-card">
+      <p className="p-6 text-lg font-semibold text-foreground">
         Produtos mais vendidos
       </p>
 
@@ -24,10 +24,10 @@ const MostSoldProducts = async () => {
 
 const MostSoldProductsSkeleton = () => {
   return (
-    <Skeleton className="bg-white p-6">
+    <Skeleton className="bg-card p-6">
       <div className="space-y-2">
-        <div className="h-5 w-[86.26px] rounded-md bg-gray-200" />
-        <div className="h-4 w-48 rounded-md bg-gray-200" />
+        <div className="h-5 w-[86.26px] rounded-md bg-muted" />
+        <div className="h-4 w-48 rounded-md bg-muted" />
         <MostSoldProductItemSkeleton />
         <MostSoldProductItemSkeleton />
         <MostSoldProductItemSkeleton />

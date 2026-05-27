@@ -112,22 +112,24 @@ const UpsertSheetContent = ({
       (product) => product.id === data.productId,
     );
     if (!selectedProduct) return;
-    setSelectedProducts((currentProducts) => {
-      const existingProduct = currentProducts.find(
-        (product) => product.id === selectedProduct.id,
-      );
-      if (existingProduct) {
-        const productsIsOutOfStock =
-          existingProduct.quantity + data.quantity > selectedProduct.stock;
 
-        if (productsIsOutOfStock) {
-          form.setError("quantity", {
-            message: "Quantidade indisponível em estoque.",
-          });
-          return currentProducts;
-        }
-        form.reset();
-        return currentProducts.map((product) => {
+    const existingProduct = selectedProducts.find(
+      (product) => product.id === selectedProduct.id,
+    );
+
+    if (existingProduct) {
+      const productsIsOutOfStock =
+        existingProduct.quantity + data.quantity > selectedProduct.stock;
+
+      if (productsIsOutOfStock) {
+        form.setError("quantity", {
+          message: "Quantidade indisponível em estoque.",
+        });
+        return;
+      }
+
+      setSelectedProducts((currentProducts) =>
+        currentProducts.map((product) => {
           if (product.id === selectedProduct.id) {
             return {
               ...product,
@@ -135,26 +137,29 @@ const UpsertSheetContent = ({
             };
           }
           return product;
-        });
-      }
-
-      const productsIsOutOfStock = data.quantity > selectedProduct.stock;
-      if (productsIsOutOfStock) {
-        form.setError("quantity", {
-          message: "Quantidade indisponível em estoque.",
-        });
-        return currentProducts;
-      }
+        }),
+      );
       form.reset();
-      return [
-        ...currentProducts,
-        {
-          ...selectedProduct,
-          price: Number(selectedProduct.price),
-          quantity: data.quantity,
-        },
-      ];
-    });
+      return;
+    }
+
+    const productsIsOutOfStock = data.quantity > selectedProduct.stock;
+    if (productsIsOutOfStock) {
+      form.setError("quantity", {
+        message: "Quantidade indisponível em estoque.",
+      });
+      return;
+    }
+
+    setSelectedProducts((currentProducts) => [
+      ...currentProducts,
+      {
+        ...selectedProduct,
+        price: Number(selectedProduct.price),
+        quantity: data.quantity,
+      },
+    ]);
+    form.reset();
   };
   const productsTotal = useMemo(() => {
     return selectedProducts.reduce((acc, product) => {

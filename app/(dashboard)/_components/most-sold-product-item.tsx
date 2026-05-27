@@ -12,7 +12,7 @@ const MostSoldProductItem = ({ product }: MostSoldProductItemProps) => {
       <div className="space-y-[6px]">
         <ProductStatusBadge status={product.status} />
         <p className="font-semibold">{product.name}</p>
-        <p className="font-medium text-slate-500">
+        <p className="font-medium text-muted-foreground">
           {formatCurrency(product.price)}
         </p>
       </div>
@@ -27,12 +27,12 @@ const MostSoldProductItemSkeleton = () => {
   return (
     <div className="flex items-center justify-between pt-5">
       <div className="space-y-2">
-        <div className="h-[22px] w-[91.23px] rounded-md bg-gray-200" />
-        <div className="h-6 w-[91.23px] rounded-md bg-gray-200" />
-        <div className="h-6 w-[105px] rounded-md bg-gray-200" />
+        <div className="h-[22px] w-[91.23px] rounded-md bg-muted" />
+        <div className="h-6 w-[91.23px] rounded-md bg-muted" />
+        <div className="h-6 w-[105px] rounded-md bg-muted" />
       </div>
       <div>
-        <div className="h-5 w-[86.26px] rounded-md bg-gray-200" />
+        <div className="h-5 w-[86.26px] rounded-md bg-muted" />
       </div>
     </div>
   );

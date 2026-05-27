@@ -3,6 +3,7 @@ import "./globals.css";
 import Sidebar from "./_components/sidebar";
 import { Inter } from "next/font/google";
 import { Toaster } from "@/app/_components/ui/sonner";
+import { ThemeProvider } from "./_components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Stockly",
@@ -17,13 +18,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen antialiased`}>
-        <div className="flex h-full">
-          <Sidebar />
-          {children}
-        </div>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <div className="flex h-full">
+            <Sidebar />
+            {children}
+          </div>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
